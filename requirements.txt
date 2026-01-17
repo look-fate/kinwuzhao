@@ -1,4 +1,4 @@
-pendulum==2.1.2
+# pendulum>=3.0.0  # Already installed
 bidict==0.23.1
 streamlit==1.45.0
 streamlit-screen-stats==0.0.82
