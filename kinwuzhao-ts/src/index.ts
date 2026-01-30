@@ -5,12 +5,7 @@
 
 // 导出核心功能
 export { ganZhi, getHourZhi, type GanZhiResult } from './ganzhi.js';
-export {
-  findCurrentJieQi,
-  findJieQiDate,
-  findSeason,
-  distanceToJieQi,
-} from './jieqi.js';
+export { findCurrentJieQi, findSeason } from './jieqi.js';
 export {
   fiveZhaoPaiPan,
   ganzhiPaiPan,
@@ -29,7 +24,7 @@ export {
   getLiuJiaXun,
   findLunarHour,
   findLunarMonth,
-  findLunarMinute,
+  findLunarKe,
   getWuXing,
   BiDict,
 } from './utils.js';
