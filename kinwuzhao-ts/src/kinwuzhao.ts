@@ -250,9 +250,9 @@ export function ganzhiPaiPan(
 ): WuZhaoPaiPanResult {
   const { year, month, day, hour, minute } = gzList;
 
-  // 验证日干
-  const dayGan = day[0];
-  if (!(dayGan in DAY_GAN_TO_BEAST)) {
+  // 验证分钟干支的天干（Python版本使用mi[0]）
+  const minuteGan = minute[0];
+  if (!(minuteGan in DAY_GAN_TO_BEAST)) {
     return { 錯誤: '日干不正確，請輸入：甲乙丙丁戊己庚辛壬癸' };
   }
 
@@ -262,8 +262,8 @@ export function ganzhiPaiPan(
     jz2num[gz] = index + 1;
   });
 
-  // 确定六兽序列
-  const beastStart = DAY_GAN_TO_BEAST[dayGan];
+  // 确定六兽序列（使用分钟干支的天干）
+  const beastStart = DAY_GAN_TO_BEAST[minuteGan];
   const startIndex = SIX_BEASTS.indexOf(beastStart as any);
   const beastSeq = Array.from({ length: 6 }, (_, i) => SIX_BEASTS[(startIndex + i) % 6]);
 

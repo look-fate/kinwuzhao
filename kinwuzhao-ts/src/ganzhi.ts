@@ -1,11 +1,10 @@
 /**
  * 五兆占卜系统 - 干支计算模块
- * 负责根据公历日期计算天干地支
+ * 使用tyme4ts计算天干地支
  */
 
-import { Solar } from 'lunar-typescript';
-import { TIAN_GAN, DI_ZHI } from './constants.js';
-import { findLunarHour, findLunarMinute, JIAZI, newList } from './utils.js';
+import { SolarTime } from 'tyme4ts';
+import { findLunarKe, JIAZI, newList } from './utils.js';
 
 /**
  * 干支结果
@@ -48,19 +47,22 @@ export function ganZhi(
     adjustedHour = 0;
   }
 
-  // 使用lunar-typescript库获取干支
-  const solar = Solar.fromYmdHms(adjustedYear, adjustedMonth, adjustedDay, adjustedHour, minute, 0);
-  const lunar = solar.getLunar();
+  // 使用tyme4ts获取八字
+  const solarTime = SolarTime.fromYmdHms(adjustedYear, adjustedMonth, adjustedDay, adjustedHour, minute, 0);
+  const lunarHour = solarTime.getLunarHour();
+  const eightChar = lunarHour.getEightChar();
 
-  const yearGanZhi = lunar.getYearInGanZhi();
-  const monthGanZhi = lunar.getMonthInGanZhi();
-  const dayGanZhi = lunar.getDayInGanZhi();
-  const hourGanZhi = lunar.getTimeInGanZhi();
+  const yearGanZhi = eightChar.getYear().getName();
+  const monthGanZhi = eightChar.getMonth().getName();
+  const dayGanZhi = eightChar.getDay().getName();
+  const hourGanZhi = eightChar.getHour().getName();
 
-  // 计算分干支（获取当天子时的干支）
-  const ziSolar = Solar.fromYmdHms(adjustedYear, adjustedMonth, adjustedDay, 0, 0, 0);
-  const ziLunar = ziSolar.getLunar();
-  const ziGanZhi = ziLunar.getTimeInGanZhi();
+  // 计算刻干支（使用五马遁，每10分钟一个干支）
+  // 获取当天子时的干支
+  const ziSolarTime = SolarTime.fromYmdHms(adjustedYear, adjustedMonth, adjustedDay, 0, 0, 0);
+  const ziLunarHour = ziSolarTime.getLunarHour();
+  const ziEightChar = ziLunarHour.getEightChar();
+  const ziGanZhi = ziEightChar.getHour().getName();
   const minuteGanZhi = getMinuteGanZhi(ziGanZhi, adjustedHour, minute);
 
   return {
@@ -73,18 +75,19 @@ export function ganZhi(
 }
 
 /**
- * 根据时辰干支和具体时间计算分钟干支
+ * 根据子时干支和具体时间计算分钟干支（刻干支）
+ * 每10分钟对应一个干支，对应Python版本的ke_jiazi_d函数
  */
 function getMinuteGanZhi(ziGanZhi: string, hour: number, minute: number): string {
-  const minuteList = findLunarMinute(ziGanZhi);
+  const keList = findLunarKe(ziGanZhi);
 
-  // 将时间转换为分钟总数
-  const totalMinutes = hour * 60 + minute;
+  // 将分钟取整到10分钟（00, 10, 20, 30, 40, 50）
+  const roundedMinute = Math.floor(minute / 10) * 10;
 
-  // 每个干支对应2分钟
-  const index = Math.floor(totalMinutes / 2) % 60;
+  // 计算索引：每小时6个刻，每天144个刻，循环60个干支
+  const keIndex = (hour * 6 + Math.floor(roundedMinute / 10)) % 60;
 
-  return minuteList[index];
+  return keList[keIndex];
 }
 
 /**
