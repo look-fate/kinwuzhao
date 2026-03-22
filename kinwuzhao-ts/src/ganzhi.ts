@@ -4,7 +4,7 @@
  */
 
 import { SolarTime } from 'tyme4ts';
-import { findLunarKe, JIAZI, newList } from './utils.js';
+import { findLunarMinute, JIAZI, newList } from './utils.js';
 
 /**
  * 干支结果
@@ -75,19 +75,16 @@ export function ganZhi(
 }
 
 /**
- * 根据子时干支和具体时间计算分钟干支（刻干支）
- * 每10分钟对应一个干支，对应Python版本的ke_jiazi_d函数
+ * 根据子时干支和具体时间计算分钟干支
+ * 每分钟对应一个干支，60分钟恰好一个完整循环
+ * 对应Python版本的minutes_jiazi_d函数
  */
 function getMinuteGanZhi(ziGanZhi: string, hour: number, minute: number): string {
-  const keList = findLunarKe(ziGanZhi);
+  const minuteList = findLunarMinute(ziGanZhi);
 
-  // 将分钟取整到10分钟（00, 10, 20, 30, 40, 50）
-  const roundedMinute = Math.floor(minute / 10) * 10;
-
-  // 计算索引：每小时6个刻，每天144个刻，循环60个干支
-  const keIndex = (hour * 6 + Math.floor(roundedMinute / 10)) % 60;
-
-  return keList[keIndex];
+  // 每分钟一个干支，只取决于分钟值（0-59），与小时无关
+  // 60分钟 = 60干支，恰好一个完整循环
+  return minuteList[minute];
 }
 
 /**

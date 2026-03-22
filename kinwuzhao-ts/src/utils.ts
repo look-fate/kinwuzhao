@@ -143,25 +143,25 @@ export function findLunarMonth(yearGanZhi: string): Record<number, string> {
 }
 
 /**
- * 五马遁 - 根据子时干支推算刻干支（每10分钟一个干支）
- * 对应Python版本的find_lunar_ke函数
+ * 五狗遁 - 根据子时干支推算分干支（每分钟一个干支）
+ * 对应Python版本的find_lunar_minute函数
  */
-export function findLunarKe(hourGanZhi: string): string[] {
-  const fiveHorses: Record<string, string> = {
-    丙: '甲午',
-    辛: '甲午',
-    丁: '丙午',
-    壬: '丙午',
-    戊: '戊午',
-    癸: '戊午',
-    甲: '庚午',
-    己: '庚午',
-    乙: '壬午',
-    庚: '壬午',
+export function findLunarMinute(hourGanZhi: string): string[] {
+  const fiveDogs: Record<string, string> = {
+    甲: '甲戌',
+    己: '甲戌',
+    乙: '丙戌',
+    庚: '丙戌',
+    丙: '戊戌',
+    辛: '戊戌',
+    丁: '庚戌',
+    壬: '庚戌',
+    戊: '壬戌',
+    癸: '壬戌',
   };
 
   const hourGan = hourGanZhi[0];
-  const startGanZhi = fiveHorses[hourGan];
+  const startGanZhi = fiveDogs[hourGan];
   if (!startGanZhi) return JIAZI;
 
   return newList(JIAZI, startGanZhi);

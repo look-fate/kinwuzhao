@@ -24,7 +24,7 @@ export {
   getLiuJiaXun,
   findLunarHour,
   findLunarMonth,
-  findLunarKe,
+  findLunarMinute,
   getWuXing,
   BiDict,
 } from './utils.js';
