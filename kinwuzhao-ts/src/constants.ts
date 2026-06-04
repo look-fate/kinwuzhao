@@ -184,7 +184,7 @@ export const WU_XING_RELATION: Record<string, string> = {
   金金: '比和',
   金水: '我生',
   水木: '我生',
-  水火: '尅我',
+  水火: '我尅',
   水土: '尅我',
   水金: '生我',
   水水: '比和',
